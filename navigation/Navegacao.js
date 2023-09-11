@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Login from "../views/Login";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Registrarse from "../views/Registrarse";
+import Home from "../views/Home";
 
 export default () => {
 
@@ -32,6 +33,18 @@ export default () => {
                         backgroundColor: '#27AE60'
                     },
                     headerBackButtonMenuEnabled: true
+                } } />
+                <Stack.Screen
+                name='tela_home'
+                component={ Home }
+                options={ {
+                    title: 'Home',
+                    headerTintColor: '#ffffff',
+                    navigationBarColor: '#27AE60',
+                    headerStyle: {
+                        backgroundColor: '#27AE60'
+                    },
+                    headerBackButtonMenuEnabled: false
                 } } />
             </Stack.Navigator>
         </NavigationContainer>

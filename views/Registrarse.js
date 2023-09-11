@@ -93,7 +93,7 @@ export default ({ navigation }) => {
                     <TouchableOpacity
                     style={ estilos_tela_registrarse.btn_registrarse }
                     onPress={ () => {
-                        registrarse();
+                        // registrarse();
                     } }>
                         <Text style={ estilos_tela_registrarse.txt_btn_registrarse }>Registrar-se</Text>
                     </TouchableOpacity>

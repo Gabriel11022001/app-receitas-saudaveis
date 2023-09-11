@@ -70,7 +70,9 @@ export default ({ navigation }) => {
                     onChangeText={ (senha) => {
                         setSenha(senha);
                     } } />
-                    <BotaoPadrao textoBotao='Entrar' realizarOperacao={ login } />
+                    <BotaoPadrao textoBotao='Entrar' realizarOperacao={ () => {
+                        navigation.navigate('tela_home');
+                    } } />
                     <TouchableOpacity
                     style={ estilo_tela_login.btn_registrarse }
                     onPress={ () => {
