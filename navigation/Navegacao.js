@@ -3,6 +3,7 @@ import Login from "../views/Login";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Registrarse from "../views/Registrarse";
 import Home from "../views/Home";
+import Receitas from "../views/Receitas";
 
 export default () => {
 
@@ -45,6 +46,18 @@ export default () => {
                         backgroundColor: '#27AE60'
                     },
                     headerBackButtonMenuEnabled: false
+                } } />
+                <Stack.Screen
+                name='tela_receitas'
+                component={ Receitas }
+                options={ {
+                    title: 'Receitas',
+                    headerTintColor: '#ffffff',
+                    navigationBarColor: '#27AE60',
+                    headerStyle: {
+                        backgroundColor: '#27AE60'
+                    },
+                    headerBackButtonMenuEnabled: true
                 } } />
             </Stack.Navigator>
         </NavigationContainer>

@@ -5,7 +5,8 @@ import estilo_card_navegar_tela from "../styles/estilo_card_navegar_tela";
 export default ({ navigation, props }) => {
 
     const navegarParaTela = (tela) => {
-        console.log(tela);
+        // console.log(tela);
+        navigation.navigate(tela);
     }
 
     return (
