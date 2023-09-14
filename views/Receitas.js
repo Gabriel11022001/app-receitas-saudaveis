@@ -62,6 +62,12 @@ export default ({ navigation }) => {
         }
     ]);
 
+    const visualizarReceita = (idReceita) => {
+        navigation.navigate('tela_visualizar_receita', {
+            id: idReceita
+        });
+    }
+
     const apresentarReceitas = () => {
 
         if (receitas.length > 0) {
@@ -75,10 +81,7 @@ export default ({ navigation }) => {
                 dataRegistro={ item.data_registro }
                 usuario={ item.usuario }
                 urlFoto=''
-                visualizarReceita={ () => {
-                    console.log(item.id);
-                    console.log('índice da receita: ' + index);
-                } } />
+                visualizarReceita={ () => visualizarReceita(item.id) } />
             ) }/>
         }
 

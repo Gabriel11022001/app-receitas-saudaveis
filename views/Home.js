@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import estilo_tela_home from "../styles/estilo_tela_home";
 import estilo_card_navegar_tela from "../styles/estilo_card_navegar_tela";
 
@@ -7,6 +7,27 @@ export default ({ navigation, props }) => {
     const navegarParaTela = (tela) => {
         // console.log(tela);
         navigation.navigate(tela);
+    }
+
+    const sair = () => {
+        Alert.alert('Sair', 'Deseja sair do aplicativo?', [
+            {
+                text: 'Sim',
+                onPress: () => {
+                    confirmarSairApp();
+                },
+                style: 'destructive'
+            },
+            {
+                text: 'Não',
+                onPress: () => null,
+                style: 'cancel'
+            }
+        ]);
+    }
+
+    const confirmarSairApp = () => {
+        navigation.goBack();
     }
 
     return (
@@ -51,7 +72,7 @@ export default ({ navigation, props }) => {
                     <TouchableOpacity
                     style={ estilo_card_navegar_tela.estilo_card_navegar }
                     onPress={ () => {
-                        navegarParaTela('sair');
+                        sair();
                     } }>
                         <Image style={ estilo_card_navegar_tela.estilo_icone } source={
                             require('../assets/sair.png')

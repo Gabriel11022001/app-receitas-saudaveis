@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Registrarse from "../views/Registrarse";
 import Home from "../views/Home";
 import Receitas from "../views/Receitas";
+import VisualizarReceita from "../views/VisualizarReceita";
 
 export default () => {
 
@@ -52,6 +53,18 @@ export default () => {
                 component={ Receitas }
                 options={ {
                     title: 'Receitas',
+                    headerTintColor: '#ffffff',
+                    navigationBarColor: '#27AE60',
+                    headerStyle: {
+                        backgroundColor: '#27AE60'
+                    },
+                    headerBackButtonMenuEnabled: true
+                } } />
+                <Stack.Screen
+                name='tela_visualizar_receita'
+                component={ VisualizarReceita }
+                options={ {
+                    title: 'Receita',
                     headerTintColor: '#ffffff',
                     navigationBarColor: '#27AE60',
                     headerStyle: {
