@@ -26,7 +26,7 @@ export default ({ navigation, props }) => {
         ]);
     }
 
-    const confirmarSairApp = () => {
+    const confirmarSairApp = async () => {
         navigation.goBack();
     }
 
