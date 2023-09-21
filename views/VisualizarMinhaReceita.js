@@ -29,7 +29,9 @@ export default ({ navigation, route }) => {
     }
 
     const redirecionarTelaEditarReceita = () => {
-        
+        navigation.navigate('tela_editar_receita', {
+            id: idReceita
+        });
     }
 
     return (

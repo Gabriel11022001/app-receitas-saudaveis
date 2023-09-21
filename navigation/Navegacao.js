@@ -11,6 +11,7 @@ import AlterarDadosCadastrais from "../views/AlterarDadosCadastrais";
 import MinhasReceitas from "../views/MinhasReceitas";
 import CadastrarReceita from "../views/CadastrarReceita";
 import VisualizarMinhaReceita from "../views/VisualizarMinhaReceita";
+import EditarReceita from "../views/EditarReceita";
 
 export default () => {
 
@@ -143,6 +144,18 @@ export default () => {
                 component={ VisualizarMinhaReceita }
                 options={ {
                     title: 'Minha receita',
+                    headerTintColor: '#ffffff',
+                    navigationBarColor: '#27AE60',
+                    headerStyle: {
+                        backgroundColor: '#27AE60'
+                    },
+                    headerBackButtonMenuEnabled: true
+                } } />
+                <Stack.Screen
+                name='tela_editar_receita'
+                component={ EditarReceita }
+                options={ {
+                    title: 'Editar receita',
                     headerTintColor: '#ffffff',
                     navigationBarColor: '#27AE60',
                     headerStyle: {
