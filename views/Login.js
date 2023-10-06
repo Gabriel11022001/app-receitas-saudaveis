@@ -1,4 +1,5 @@
 import { SafeAreaView } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import estilo_tela_login from "../styles/estilo_tela_login";
 import { Text } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
@@ -8,10 +9,11 @@ import { Image } from "react-native";
 import { View } from "react-native";
 import { TextInput } from "react-native";
 import BotaoPadrao from "../components/BotaoPadrao";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import Loader from "../components/Loader";
 import { TouchableOpacity } from "react-native";
+import service from "../api/service";
 
 export default ({ navigation }) => {
 
@@ -28,12 +30,44 @@ export default ({ navigation }) => {
                 email: email,
                 senha: senha
             };
-            const endpoint = '/usuario/login';
+            const resp = await service.post('/login', dadosUsuario);
+            const msg = resp.data.msg;
+            const cont = resp.data.conteudo;
+
+            if (msg === 'Login efetuado com sucesso!') {
+                await AsyncStorage.setItem('usuario_logado', JSON.stringify(resp.data.conteudo));
+                navigation.navigate('tela_home');
+            } else {
+                let msgAlerta = msg + '\n\n';
+                
+                if (cont != null) {
+
+                    if (cont.email != null) {
+                        msgAlerta = msgAlerta + '-' + cont.email + '\n\n';
+                    }
+
+                    if (cont.senha != null) {
+                        msgAlerta = msgAlerta + '-' + cont.senha + '\n\n';
+                    }
+
+                }
+
+                Alert.alert('Login', msgAlerta);
+            }
+
         } catch (e) {
-            console.log(e);
+            // console.log(e);
         }
 
+        setApresentarTelaLoad(false);
     }
+
+    useEffect(() => {
+        navigation.addListener('focus', () => {
+            setEmail('');
+            setSenha('');
+        });
+    }, []);
 
     return (
         <SafeAreaView style={ estilo_tela_login.container }>
@@ -71,7 +105,7 @@ export default ({ navigation }) => {
                         setSenha(senha);
                     } } />
                     <BotaoPadrao textoBotao='Entrar' realizarOperacao={ () => {
-                        navigation.navigate('tela_home');
+                        login();
                     } } />
                     <TouchableOpacity
                     style={ estilo_tela_login.btn_registrarse }

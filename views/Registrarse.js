@@ -9,6 +9,7 @@ import { TouchableOpacity } from "react-native";
 import { Text } from "react-native";
 import service from "../api/service";
 import { Alert } from "react-native";
+import Loader from "../components/Loader";
 
 export default ({ navigation }) => {
 
@@ -28,10 +29,47 @@ export default ({ navigation }) => {
                 senha: senha,
                 senha_confirmacao: senhaConfirmacao
             };
-            console.log(usuario);
-            const resp = await service.post('/usuario', usuario);
+            const resp = await service.post('/registrar-se', usuario);
+            let msg = resp.data.msg;
+            
+            if (msg === 'Cadastro realizado com sucesso!') {
+                Alert.alert('Registrar-se', msg, [
+                    {
+                        text: 'OK',
+                        onPress: () => {
+                            navigation.navigate('tela_login');
+                        },
+                        style: 'default'
+                    }
+                ]);
+            } else {
+                let msgAlerta = msg + '\n\n';
+
+                if (resp.data.conteudo != null) {
+
+                    if (resp.data.conteudo.nome != null) {
+                        msgAlerta = msgAlerta + '-' + resp.data.conteudo.nome + '\n\n';
+                    } 
+    
+                    if (resp.data.conteudo.email != null) {
+                        msgAlerta = msgAlerta + '-' + resp.data.conteudo.email + '\n\n';
+                    }
+    
+                    if (resp.data.conteudo.senha != null) {
+                        msgAlerta = msgAlerta + '-' + resp.data.conteudo.senha + '\n\n';
+                    }
+    
+                    if (resp.data.conteudo.senha_confirmacao != null) {
+                        msgAlerta = msgAlerta + '-' + resp.data.conteudo.senha_confirmacao + '\n';
+                    }
+
+                }
+
+                Alert.alert('Registrar-se', msgAlerta);
+            }
+
         } catch (e) {
-            console.log(e);
+            // console.log(e);
         }
 
         setApresentarTelaLoad(false);
@@ -39,6 +77,7 @@ export default ({ navigation }) => {
 
     return (
         <SafeAreaView style={ estilos_tela_registrarse.container }>
+            { apresentarTelaLoad ? <Loader /> : false }
             <KeyboardAvoidingView
             style={ estilos_tela_registrarse.container_possui_conteudo }
             behavior={ Platform.OS === 'ios' ? 'padding' : 'height' }
@@ -93,7 +132,7 @@ export default ({ navigation }) => {
                     <TouchableOpacity
                     style={ estilos_tela_registrarse.btn_registrarse }
                     onPress={ () => {
-                        // registrarse();
+                        registrarse();
                     } }>
                         <Text style={ estilos_tela_registrarse.txt_btn_registrarse }>Registrar-se</Text>
                     </TouchableOpacity>

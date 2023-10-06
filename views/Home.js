@@ -1,8 +1,12 @@
 import { Alert, Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import estilo_tela_home from "../styles/estilo_tela_home";
 import estilo_card_navegar_tela from "../styles/estilo_card_navegar_tela";
+import { useEffect, useState } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default ({ navigation, props }) => {
+
+    const [ nomeUsuarioLogado, setNomeUsuarioLogado ] = useState('');
 
     const navegarParaTela = (tela) => {
         // console.log(tela);
@@ -27,13 +31,37 @@ export default ({ navigation, props }) => {
     }
 
     const confirmarSairApp = async () => {
-        navigation.goBack();
+
+        try {
+            await AsyncStorage.removeItem('usuario_logado');
+            navigation.goBack();
+        } catch (e) {
+            // console.log(e);
+        }
+
     }
+
+    const obterUsuarioLogado = async () => {
+
+        try {
+            const usuarioLogado = JSON.parse(await AsyncStorage.getItem('usuario_logado'));
+            setNomeUsuarioLogado(usuarioLogado.nome);
+        } catch (e) {
+            // console.log(e);
+        }
+
+    }
+
+    useEffect(() => {
+        navigation.addListener('focus', () => {
+            obterUsuarioLogado();
+        });
+    }, []);
 
     return (
         <SafeAreaView style={ estilo_tela_home.container }>
             <View style={ estilo_tela_home.container_possui_conteudo }>
-                <Text style={ estilo_tela_home.titulo_tela_home }>Seja bem vindo Gabriel</Text>
+                <Text style={ estilo_tela_home.titulo_tela_home }>Seja bem vindo { nomeUsuarioLogado }</Text>
                 <View style={ estilo_tela_home.container_navegacao }>
                     { /** navegar para a tela contendo a listagem de todas as receitas */ }
                     <TouchableOpacity
