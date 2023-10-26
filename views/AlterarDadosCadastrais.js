@@ -47,9 +47,38 @@ export default ({ navigation }) => {
         setApresentarTelaLoad(true);
 
         try {
-            // const resposta = await service.put('/alterar_dados_cadastrais');
+            const usuarioLogado = JSON.parse(await AsyncStorage.getItem('usuario_logado'));
+            const usuario = {
+                id: usuarioLogado.id,
+                nome: nome,
+                email: email
+            };
+            const resposta = await service.put('/alterar_dados_cadastrais', JSON.stringify(usuario));
+            const msg = resposta.data.msg;
+            const conteudo = resposta.data.conteudo;
+
+            if (msg === 'Dados cadastrais alterados com sucesso!') {
+                Alert.alert('Alteração de dados cadastrais', msg);
+            } else {
+                let msgAlerta = msg + '\n\n';
+
+                if (conteudo != null) {
+
+                    if (conteudo.nome != null) {
+                        msgAlerta = msgAlerta + '- ' + conteudo.nome + '\n';
+                    }
+
+                    if (conteudo.email != null) {
+                        msgAlerta = msgAlerta + '- ' + conteudo.email + '\n';
+                    }
+
+                }
+
+                Alert.alert('Alteração de dados cadastrais', msgAlerta);
+            }   
+
         } catch (e) {
-            console.log(e);
+            // console.log(e);
         }
 
         setApresentarTelaLoad(false);

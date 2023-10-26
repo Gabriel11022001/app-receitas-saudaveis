@@ -1,11 +1,15 @@
 import { Alert, Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import estilo_tela_visualizar_minha_receita from "../styles/estilo_tela_visualizar_minha_receita";
 import BotaoPadrao from "../components/BotaoPadrao";
+import service from "../api/service";
+import Loader from "../components/Loader";
 
 export default ({ navigation, route }) => {
 
     const [ idReceita, setIdReceita ] = useState(route.params.id);
+    const [ receita, setReceita ] = useState({});
+    const [ apresentarLoad, setApresentarLoad ] = useState(false);
 
     const deletarReceita = () => {
         Alert.alert('Deletar receita', 'Deseja mesmo deletar essa receita?', [
@@ -25,7 +29,31 @@ export default ({ navigation, route }) => {
     }
 
     const efetivarDelecao = async () => {
+        setApresentarLoad(true);
 
+        try {
+            const resposta = await service.delete('/deletar_receita?id=' + idReceita);
+            const msg = resposta.data.msg;
+
+            if (msg === 'Receita deletada com sucesso!') {
+                Alert.alert('Deletar receita!', msg, [
+                    {
+                        text: 'Ok',
+                        onPress: () => {
+                            navigation.navigate('tela_minhas_receitas');
+                        },
+                        style: 'default'
+                    }
+                ]);
+            } else {
+
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+
+        setApresentarLoad(false);
     }
 
     const redirecionarTelaEditarReceita = () => {
@@ -34,18 +62,47 @@ export default ({ navigation, route }) => {
         });
     }
 
+    const buscarReceita = async () => {
+        setApresentarLoad(true);
+
+        try {
+            const resposta = await service.get('/buscar_receita_pelo_id?id=' + idReceita);
+            const msg = resposta.data.msg;
+            const receita = resposta.data.conteudo;
+            
+            if (msg === 'Receita encontrada com sucesso!') {
+                setReceita(receita);
+            } else {
+                Alert.alert('Aviso!', msg);
+            }
+
+        } catch (e) {
+            // console.log(e);
+        }
+
+        setApresentarLoad(false);
+    }
+
+    useEffect(() => {
+        navigation.addListener('focus', () => {
+            setReceita({});
+            buscarReceita();
+        });
+    }, []);
+
     return (
         <SafeAreaView style={ estilo_tela_visualizar_minha_receita.container }>
+            { apresentarLoad ? <Loader /> : false }
             <ScrollView style={ estilo_tela_visualizar_minha_receita.container_possui_conteudo }>
                 <Image source={ require('../assets/macarons-2548827_640.jpg') } style={ estilo_tela_visualizar_minha_receita.foto_receita } />
                 <View style={ estilo_tela_visualizar_minha_receita.conteudo_receita_descricao }>
-                    <Text style={ estilo_tela_visualizar_minha_receita.nome_receita }>Nome da receita</Text>
-                    <Text style={ estilo_tela_visualizar_minha_receita.data_cadastro }>11/09/2023</Text>
-                    <Text style={ estilo_tela_visualizar_minha_receita.usuario }>Gabriel</Text>
+                    <Text style={ estilo_tela_visualizar_minha_receita.nome_receita }>{ receita.nome_receita }</Text>
+                    <Text style={ estilo_tela_visualizar_minha_receita.data_cadastro }>{ receita.data_cadastro }</Text>
+                    <Text style={ estilo_tela_visualizar_minha_receita.usuario }>{ receita.nome_usuario }</Text>
                     <View style={ estilo_tela_visualizar_minha_receita.container_ingredientes_modo_preparo }>
                         <Text style={ estilo_tela_visualizar_minha_receita.titulo_secao }>Ingredientes</Text>
                         <Text style={ estilo_tela_visualizar_minha_receita.texto_ingrediente_modo_preparo }>
-                            Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos. Lorem Ipsum sobreviveu não só a cinco séculos, como também ao salto para a editoração eletrônica, permanecendo essencialmente inalterado. Se popularizou na década de 60, quando a Letraset lançou decalques contendo passagens de Lorem Ipsum, e mais recentemente quando passou a ser integrado a softwares de editoração eletrônica como Aldus PageMaker.
+                            { receita.ingredientes }
                         </Text>
                     </View>
                     <View style={[
@@ -54,7 +111,7 @@ export default ({ navigation, route }) => {
                     ]}>
                         <Text style={ estilo_tela_visualizar_minha_receita.titulo_secao }>Modo de preparo</Text>
                         <Text style={ estilo_tela_visualizar_minha_receita.texto_ingrediente_modo_preparo }>
-                            Lorem Ipsum é simplesmente uma simulação de texto da indústria tipográfica e de impressos, e vem sendo utilizado desde o século XVI, quando um impressor desconhecido pegou uma bandeja de tipos e os embaralhou para fazer um livro de modelos de tipos. Lorem Ipsum sobreviveu não só a cinco séculos, como também ao salto para a editoração eletrônica, permanecendo essencialmente inalterado. Se popularizou na década de 60, quando a Letraset lançou decalques contendo passagens de Lorem Ipsum, e mais recentemente quando passou a ser integrado a softwares de editoração eletrônica como Aldus PageMaker.
+                            { receita.modo_preparo }
                         </Text>
                     </View>
                 </View>
