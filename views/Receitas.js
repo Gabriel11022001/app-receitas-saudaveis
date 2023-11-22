@@ -28,7 +28,8 @@ export default ({ navigation }) => {
                 nome={ item.nome_receita }
                 dataRegistro={ item.data_cadastro }
                 usuario={ item.nome_usuario }
-                urlFoto=''
+                urlFoto={ item.foto.url }
+                ext={ item.foto.ext }
                 visualizarReceita={ () => visualizarReceita(item.id) } />
             ) }/>
         }
@@ -42,6 +43,7 @@ export default ({ navigation }) => {
             const resposta = await service.get('/receitas');
             const mensagem = resposta.data.msg;
             const receitas = resposta.data.conteudo;
+            console.log(receitas);
             
             if (mensagem === 'Receitas encontradas com sucesso!') {
                 setReceitas(receitas);

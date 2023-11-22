@@ -30,7 +30,8 @@ export default ({ navigation }) => {
                 nome={ item.nome_receita }
                 dataRegistro={ item.data_cadastro }
                 usuario={ item.nome_usuario }
-                urlFoto=''
+                urlFoto={ item.foto.url }
+                ext={ item.foto.ext }
                 visualizarReceita={ () => visualizarReceita(item.id) } />
             ) }/>
         }

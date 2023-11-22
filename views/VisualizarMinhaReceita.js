@@ -70,6 +70,8 @@ export default ({ navigation, route }) => {
             const msg = resposta.data.msg;
             const receita = resposta.data.conteudo;
             
+            console.log(receita);
+
             if (msg === 'Receita encontrada com sucesso!') {
                 setReceita(receita);
             } else {
@@ -94,7 +96,9 @@ export default ({ navigation, route }) => {
         <SafeAreaView style={ estilo_tela_visualizar_minha_receita.container }>
             { apresentarLoad ? <Loader /> : false }
             <ScrollView style={ estilo_tela_visualizar_minha_receita.container_possui_conteudo }>
-                <Image source={ require('../assets/macarons-2548827_640.jpg') } style={ estilo_tela_visualizar_minha_receita.foto_receita } />
+                <Image style={ estilo_tela_visualizar_minha_receita.foto_receita } source={{
+                    uri: 'data:image/' + receita.foto.ext + ';base64,' + receita.foto.url
+                }} />
                 <View style={ estilo_tela_visualizar_minha_receita.conteudo_receita_descricao }>
                     <Text style={ estilo_tela_visualizar_minha_receita.nome_receita }>{ receita.nome_receita }</Text>
                     <Text style={ estilo_tela_visualizar_minha_receita.data_cadastro }>{ receita.data_cadastro }</Text>

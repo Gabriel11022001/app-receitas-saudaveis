@@ -8,7 +8,9 @@ export default (props) => {
         style={[ estilo_receita_item.estilo_item_receita, props.ultimaReceitaListagem ? estilo_receita_item.margem_baixo_ultima_receita : estilo_receita_item.margem_baixo_nao_ultima_receita ]}
         onPress={ props.visualizarReceita }>
             <View style={ estilo_receita_item.container_lado_esquerdo }>
-                <Image source={ require('../assets/macarons-2548827_640.jpg') }  style={ estilo_receita_item.foto } />
+                <Image style={ estilo_receita_item.foto } source={{
+                    uri: 'data:image/' + props.ext + ';base64,' + props.urlFoto
+                }} />
             </View>
             <View style={ estilo_receita_item.container_lado_direito }>
                 <Text style={ estilo_receita_item.nome }>{ props.nome }</Text>
