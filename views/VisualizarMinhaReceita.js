@@ -10,6 +10,8 @@ export default ({ navigation, route }) => {
     const [ idReceita, setIdReceita ] = useState(route.params.id);
     const [ receita, setReceita ] = useState({});
     const [ apresentarLoad, setApresentarLoad ] = useState(false);
+    const [ ext, setExt ] = useState('');
+    const [ url, setUrl ] = useState('');
 
     const deletarReceita = () => {
         Alert.alert('Deletar receita', 'Deseja mesmo deletar essa receita?', [
@@ -74,6 +76,8 @@ export default ({ navigation, route }) => {
 
             if (msg === 'Receita encontrada com sucesso!') {
                 setReceita(receita);
+                setExt(receita.foto.ext);
+                setUrl(receita.foto.url);
             } else {
                 Alert.alert('Aviso!', msg);
             }
@@ -97,7 +101,7 @@ export default ({ navigation, route }) => {
             { apresentarLoad ? <Loader /> : false }
             <ScrollView style={ estilo_tela_visualizar_minha_receita.container_possui_conteudo }>
                 <Image style={ estilo_tela_visualizar_minha_receita.foto_receita } source={{
-                    uri: 'data:image/' + receita.foto.ext + ';base64,' + receita.foto.url
+                    uri: 'data:image/' + ext + ';base64,' + url
                 }} />
                 <View style={ estilo_tela_visualizar_minha_receita.conteudo_receita_descricao }>
                     <Text style={ estilo_tela_visualizar_minha_receita.nome_receita }>{ receita.nome_receita }</Text>
